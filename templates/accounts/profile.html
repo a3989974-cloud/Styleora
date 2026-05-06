@@ -177,8 +177,18 @@
     box-shadow: 0 8px 25px rgba(201, 169, 98, 0.4);
 }
 @media (max-width: 768px) {
-    .profile-layout { grid-template-columns: 1fr; }
-    .profile-nav { position: static; }
+    .profile-page { padding: 40px 0; }
+    .profile-page h1 { font-size: 28px; margin-bottom: 25px; }
+    .profile-layout { grid-template-columns: 1fr; gap: 20px; }
+    .profile-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-nav a { flex: 1; text-align: center; padding: 10px 15px; font-size: 13px; min-width: 120px; }
+    .profile-content { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .profile-page h1 { font-size: 24px; }
+    .profile-nav { flex-direction: column; }
+    .profile-nav a { width: 100%; }
 }
 </style>
 {% endblock %}

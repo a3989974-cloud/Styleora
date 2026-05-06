@@ -320,5 +320,24 @@
     .checkout-layout { grid-template-columns: 1fr; }
     .order-summary-section { position: static; }
 }
+@media (max-width: 768px) {
+    .checkout-page { padding: 40px 0; }
+    .checkout-page h1 { font-size: 28px; margin-bottom: 25px; }
+    .checkout-form-section h2 { font-size: 20px; margin-bottom: 18px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group input, .form-group textarea { padding: 12px; font-size: 14px; }
+    .payment-content { flex-direction: column; text-align: center; gap: 10px; padding: 15px; }
+    .payment-content i { font-size: 24px; }
+    .order-summary-section { padding: 20px; }
+    .order-summary-section h2 { font-size: 20px; margin-bottom: 18px; }
+    .order-item img { width: 50px; height: 50px; }
+    .order-item h3 { font-size: 13px; }
+    .summary-row.total { font-size: 18px; }
+    .btn-place-order { padding: 16px; font-size: 14px; }
+}
+@media (max-width: 480px) {
+    .checkout-page h1 { font-size: 24px; }
+    .form-group label { font-size: 13px; }
+}
 </style>
 {% endblock %}

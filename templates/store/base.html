@@ -562,21 +562,100 @@
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
         
+        /* Mobile Navigation Toggle */
+        .menu-toggle { 
+            display: none; 
+            background: none; 
+            border: none; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: var(--primary); 
+            padding: 5px;
+        }
+
+        /* Top Bar */
+        .top-bar { font-size: 11px; padding: 8px 15px; }
+
         @media (max-width: 1024px) { 
             .category-grid { grid-template-columns: repeat(3, 1fr); } 
             .products-grid { grid-template-columns: repeat(3, 1fr); }
             .hero h1 { font-size: 42px; }
+            .footer-grid { gap: 30px; }
         }
         @media (max-width: 768px) { 
-            .category-grid { grid-template-columns: repeat(2, 1fr); } 
-            .products-grid { grid-template-columns: repeat(2, 1fr); } 
-            .footer-grid { grid-template-columns: repeat(2, 1fr); }
-            .hero { padding: 60px 0; }
-            .hero h1 { font-size: 32px; }
-            .hero p { font-size: 16px; }
+            .header-main { 
+                flex-wrap: wrap; 
+                gap: 15px; 
+                padding: 12px 15px; 
+            }
+            .search-box { 
+                order: 3; 
+                flex: 0 0 100%; 
+                max-width: 100%; 
+            }
+            .search-box input { padding: 12px 40px 12px 15px; }
+            .search-box button { width: 32px; height: 32px; }
+            .header-actions { gap: 12px; }
+            .header-actions span { display: none; }
+            .header-actions i { font-size: 18px; margin-bottom: 0; }
+            
+            .menu-toggle { display: block; }
+            .nav ul { 
+                flex-direction: column; 
+                gap: 0; 
+                display: none; 
+                padding-top: 10px; 
+                border-top: 1px solid var(--border); 
+            }
+            .nav ul.active { display: flex; }
+            .nav li { width: 100%; text-align: center; }
+            .nav a { 
+                display: block; 
+                padding: 12px 0; 
+                font-size: 15px;
+            }
+            .nav a::after { display: none; }
+            
+            .category-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } 
+            .category-card { padding: 20px 10px; }
+            .category-card img { width: 70px; height: 70px; }
+            .category-card h3 { font-size: 13px; }
+            
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .product-image { height: 220px; }
+            .product-info { padding: 15px; }
+            .product-info h3 { font-size: 14px; }
+            .current-price { font-size: 16px; }
+            .old-price { font-size: 12px; }
+            .add-cart-btn { padding: 12px; font-size: 12px; }
+            
+            .footer-grid { grid-template-columns: 1fr; gap: 25px; }
+            .footer-brand p { font-size: 13px; }
+            
+            .hero { padding: 50px 0; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 14px; margin-bottom: 25px; }
+            .btn { padding: 14px 30px; font-size: 12px; }
+            
+            .section-title h2 { font-size: 28px; }
+            .newsletter h2 { font-size: 28px; }
+            .newsletter p { font-size: 14px; }
+            .newsletter-form { flex-direction: column; }
+            .newsletter-form button { width: 100%; }
+            .newsletter { padding: 60px 0; }
+            footer { padding: 60px 0 20px; }
         }
         @media (max-width: 480px) {
-            .products-grid { grid-template-columns: 1fr; }
+            .container { padding: 0 15px; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .product-image { height: 180px; }
+            .product-info { padding: 10px; }
+            .product-info h3 { font-size: 13px; }
+            .current-price { font-size: 14px; }
+            .product-actions { padding: 0 10px 10px; }
+            .add-cart-btn { padding: 10px; font-size: 11px; }
+            .hero h1 { font-size: 24px; }
+            .section-title h2 { font-size: 24px; }
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -591,6 +670,7 @@
                 <input type="text" name="search" placeholder="Search products...">
                 <button type="submit"><i class="fas fa-search"></i></button>
             </form>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="header-actions">
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}"><i class="fas fa-user"></i><span>Account</span></a>
@@ -606,7 +686,7 @@
         </div>
         <nav class="nav">
             <div class="container">
-                <ul>
+                <ul id="navMenu">
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'product_list' %}">Shop All</a></li>
                     <li><a href="{% url 'product_list' %}?category=handbags">Handbags</a></li>
@@ -676,6 +756,19 @@
     {% if messages %}<ul class="messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
+        // Mobile menu toggle
+        document.getElementById('menuToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+            const icon = this.querySelector('i');
+            if (document.getElementById('navMenu').classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
         // Scroll animation observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
