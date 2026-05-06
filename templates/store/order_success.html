@@ -1,3 +1,85 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed - Luxe Store{% endblock %}
+
+{% block content %}
+<section class="order-success-page">
+    <div class="container">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Thank You for Your Order!</h1>
+            <p>Your order has been placed successfully. We've sent a confirmation email to your registered email address.</p>
+            
+            <div class="order-number">
+                <span>Order Number:</span>
+                <strong>{{ order.order_number }}</strong>
+            </div>
+            
+            <div class="success-actions">
+                <a href="{% url 'order_history' %}" class="btn">View Order Details</a>
+                <a href="{% url 'product_list' %}" class="btn btn-outline">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.order-success-page {
+    padding: 100px 0;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+.success-icon {
+    margin-bottom: 30px;
+    animation: scaleIn 0.5s ease-out 0.2s backwards;
+}
+.success-icon i {
+    font-size: 80px;
+    color: var(--success);
+    animation: glow 2s ease-in-out infinite;
+    border-radius: 50%;
+}
+.success-content h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    animation: fadeInUp 0.5s ease-out 0.3s backwards;
+}
+.success-content p {
+    color: var(--text-light);
+    margin-bottom: 30px;
+    animation: fadeInUp 0.5s ease-out 0.4s backwards;
+}
+.order-number {
+    background: var(--light);
+    padding: 25px 50px;
+    display: inline-block;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    animation: fadeInUp 0.5s ease-out 0.5s backwards;
+}
+.order-number span {
+    display: block;
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+.order-number strong {
+    font-size: 24px;
+    color: var(--secondary);
+    font-weight: 700;
+}
+.success-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    animation: fadeInUp 0.5s ease-out 0.6s backwards;
+}
 @media (max-width: 768px) {
     .order-success-page { padding: 60px 0; }
     .success-content h1 { font-size: 28px; }
@@ -11,3 +93,5 @@
     .success-content h1 { font-size: 24px; }
     .success-icon i { font-size: 60px; }
 }
+</style>
+{% endblock %}

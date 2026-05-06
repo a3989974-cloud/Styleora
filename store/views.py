@@ -203,6 +203,7 @@ def checkout(request):
         phone = request.POST.get('phone')
         payment_method = request.POST.get('payment_method', 'cod')
         coupon_code = request.POST.get('coupon_code', '')
+        notes = request.POST.get('notes', '')
         
         discount = 0
         if coupon_code:
@@ -224,6 +225,7 @@ def checkout(request):
             shipping_address=shipping_address,
             phone=phone,
             payment_method=payment_method,
+            notes=notes,
             total_amount=final_total,
         )
         
