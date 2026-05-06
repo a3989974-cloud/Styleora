@@ -1,0 +1,357 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Shop - Luxe Store{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Our Collection</h1>
+        <p>Discover premium fashion and accessories</p>
+    </div>
+</section>
+
+<section class="products-page">
+    <div class="container">
+        <div class="products-layout">
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="{% url 'product_list' %}" {% if not request.GET.category %}class="active"{% endif %}>All Products</a></li>
+                        {% for category in categories %}
+                        <li><a href="{% url 'product_list' %}?category={{ category.slug }}" {% if request.GET.category == category.slug %}class="active"{% endif %}>{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Price Range</h3>
+                    <form method="GET" action="{% url 'product_list' %}">
+                        {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+                        {% if request.GET.brand %}<input type="hidden" name="brand" value="{{ request.GET.brand }}">{% endif %}
+                        <div class="price-inputs">
+                            <input type="number" name="min_price" placeholder="Min" value="{{ request.GET.min_price }}">
+                            <span>-</span>
+                            <input type="number" name="max_price" placeholder="Max" value="{{ request.GET.max_price }}">
+                        </div>
+                        <button type="submit" class="btn-filter">Apply</button>
+                    </form>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Brand</h3>
+                    <ul>
+                        {% for brand in brands %}
+                        {% if brand %}
+                        <li><a href="{% url 'product_list' %}?brand={{ brand }}">{{ brand }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+            
+            <div class="products-main">
+                <div class="products-toolbar">
+                    <p>{{ products.count }} products found</p>
+                    <div class="sort-dropdown">
+                        <form method="GET" action="{% url 'product_list' %}">
+                            {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+                            {% if request.GET.brand %}<input type="hidden" name="brand" value="{{ request.GET.brand }}">{% endif %}
+                            {% if request.GET.min_price %}<input type="hidden" name="min_price" value="{{ request.GET.min_price }}">{% endif %}
+                            {% if request.GET.max_price %}<input type="hidden" name="max_price" value="{{ request.GET.max_price }}">{% endif %}
+                            <select name="sort" onchange="this.form.submit()">
+                                <option value="-created_at" {% if request.GET.sort == '-created_at' or not request.GET.sort %}selected{% endif %}>Newest First</option>
+                                <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="name" {% if request.GET.sort == 'name' %}selected{% endif %}>Name: A to Z</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="product-grid">
+                    {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% if product.discount_price %}
+                            <span class="product-badge">-{{ product.get_discount_percent }}% OFF</span>
+                            {% endif %}
+                            {% if product.is_trending %}
+                            <span class="trending-badge">TRENDING</span>
+                            {% endif %}
+                            <div class="product-actions">
+                                <form method="POST" action="{% url 'add_to_cart' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <button type="submit" title="Add to Cart"><i class="fas fa-shopping-bag"></i></button>
+                                </form>
+                                <form method="POST" action="{% url 'add_to_wishlist' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <button type="submit" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">{{ product.category.name }}</span>
+                            <h3><a href="{% url 'product_detail' slug=product.slug %}">{{ product.name }}</a></h3>
+                            <div class="product-price">
+                                {% if product.discount_price %}
+                                <span class="current-price">${{ product.discount_price }}</span>
+                                <span class="old-price">${{ product.price }}</span>
+                                {% else %}
+                                <span class="current-price">${{ product.price }}</span>
+                                {% endif %}
+                            </div>
+                            {% if product.stock > 0 %}
+                            <span class="in-stock">In Stock</span>
+                            {% else %}
+                            <span class="out-of-stock">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="no-products">
+                        <p>No products found. Try adjusting your filters.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-header {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920') center/cover;
+    opacity: 0.2;
+}
+.page-header h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: white;
+    position: relative;
+    animation: fadeInUp 0.6s ease-out;
+}
+.page-header h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+.page-header p {
+    color: rgba(255,255,255,0.8);
+    font-size: 16px;
+    position: relative;
+    animation: fadeInUp 0.6s ease-out 0.2s backwards;
+}
+.products-page {
+    padding: 70px 0;
+}
+.products-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+}
+.filters-sidebar {
+    position: sticky;
+    top: 100px;
+    align-self: start;
+}
+.filter-section {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+}
+.filter-section:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.filter-section h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text);
+    position: relative;
+    padding-bottom: 10px;
+}
+.filter-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 30px; height: 2px;
+    background: var(--secondary);
+}
+.filter-section ul li { margin-bottom: 12px; }
+.filter-section ul li a {
+    color: var(--text-light);
+    font-size: 14px;
+    transition: all 0.3s;
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+.filter-section ul li a.active,
+.filter-section ul li a:hover {
+    color: var(--secondary);
+    background: rgba(201, 169, 98, 0.08);
+}
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.price-inputs input {
+    width: 80px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.price-inputs input:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.1);
+    outline: none;
+}
+.btn-filter {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+.btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 169, 98, 0.3);
+}
+.products-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.sort-dropdown select {
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.sort-dropdown select:focus {
+    border-color: var(--secondary);
+    outline: none;
+}
+.product-category {
+    font-size: 12px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.in-stock {
+    color: var(--success);
+    font-size: 12px;
+    font-weight: 600;
+}
+.out-of-stock {
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 600;
+}
+.trending-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: var(--white);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    z-index: 2;
+}
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px;
+    color: var(--text-light);
+    background: var(--white);
+    border-radius: 12px;
+}
+.product-grid .product-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 8px;
+    padding: 15px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+}
+.product-card:hover .product-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+.product-actions button {
+    flex: 1;
+    padding: 12px;
+    background: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+.product-actions button:hover {
+    background: var(--secondary);
+    color: var(--white);
+    transform: scale(1.05);
+}
+@media (max-width: 1024px) {
+    .products-layout { grid-template-columns: 1fr; }
+    .filters-sidebar { position: static; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+@media (max-width: 768px) {
+    .filters-sidebar { grid-template-columns: 1fr; }
+    .page-header h1 { font-size: 32px; }
+}
+</style>
+{% endblock %}

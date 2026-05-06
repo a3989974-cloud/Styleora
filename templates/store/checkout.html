@@ -1,0 +1,324 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Checkout - Luxe Store{% endblock %}
+
+{% block content %}
+<section class="checkout-page">
+    <div class="container">
+        <h1>Checkout</h1>
+        
+        <form method="POST" class="checkout-form">
+            {% csrf_token %}
+            <div class="checkout-layout">
+                <div class="checkout-form-section">
+                    <h2>Shipping Information</h2>
+                    
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }} {{ user.last_name }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Shipping Address *</label>
+                        <textarea name="shipping_address" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Order Notes (Optional)</label>
+                        <textarea name="notes" rows="2" placeholder="Special instructions for delivery"></textarea>
+                    </div>
+                    
+                    <h2>Payment Method</h2>
+                    
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="cod" checked>
+                            <div class="payment-content">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>
+                                    <h3>Cash on Delivery</h3>
+                                    <p>Pay when you receive your order</p>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="online">
+                            <div class="payment-content">
+                                <i class="fas fa-credit-card"></i>
+                                <div>
+                                    <h3>Online Payment</h3>
+                                    <p>Pay securely online</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Coupon Code</label>
+                        <input type="text" name="coupon_code" placeholder="Enter coupon code">
+                    </div>
+                </div>
+                
+                <div class="order-summary-section">
+                    <h2>Order Summary</h2>
+                    
+                    <div class="order-items">
+                        {% for item in cart_items %}
+                        <div class="order-item">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            <div>
+                                <h3>{{ item.product.name }}</h3>
+                                <p>Qty: {{ item.quantity }}</p>
+                            </div>
+                            <span>${{ item.total }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="summary-totals">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>${{ total }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>${{ total }}</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-place-order">Place Order</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.checkout-page {
+    padding: 60px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+.checkout-page h1 {
+    font-size: 42px;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.5s ease-out;
+}
+.checkout-page h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    margin-top: 15px;
+    border-radius: 2px;
+}
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+}
+.checkout-form-section h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+.checkout-form-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 40px; height: 3px;
+    background: var(--secondary);
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s;
+    background: var(--white);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.1);
+}
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.payment-option {
+    cursor: pointer;
+}
+.payment-option input {
+    display: none;
+}
+.payment-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+.payment-option input:checked + .payment-content {
+    border-color: var(--secondary);
+    background: rgba(201, 169, 98, 0.08);
+    box-shadow: 0 4px 15px rgba(201, 169, 98, 0.15);
+}
+.payment-content i {
+    font-size: 28px;
+    color: var(--secondary);
+}
+.payment-content h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.payment-content p {
+    font-size: 14px;
+    color: var(--text-light);
+}
+.order-summary-section {
+    background: var(--light);
+    padding: 30px;
+    border-radius: 12px;
+    height: fit-content;
+    border: 1px solid var(--border);
+    position: sticky;
+    top: 120px;
+}
+.order-summary-section h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px;
+}
+.order-summary-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 40px; height: 3px;
+    background: var(--secondary);
+    border-radius: 2px;
+}
+.order-items {
+    margin-bottom: 25px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+.order-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.order-item h3 {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.order-item p {
+    font-size: 12px;
+    color: var(--text-light);
+}
+.order-item span {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--secondary);
+}
+.summary-totals {
+    margin-bottom: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.summary-row.total {
+    border-top: 2px solid var(--border);
+    padding-top: 15px;
+    margin-top: 15px;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--secondary);
+}
+.btn-place-order {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.btn-place-order::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+.btn-place-order:hover::before {
+    left: 100%;
+}
+.btn-place-order:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(201, 169, 98, 0.4);
+}
+@media (max-width: 1024px) {
+    .checkout-layout { grid-template-columns: 1fr; }
+    .order-summary-section { position: static; }
+}
+</style>
+{% endblock %}
