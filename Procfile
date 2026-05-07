@@ -1,0 +1,1 @@
+web: gunicorn luxe_store.wsgi --log-file -
