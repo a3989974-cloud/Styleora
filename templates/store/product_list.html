@@ -4,10 +4,11 @@
 {% block title %}Shop - Luxe Store{% endblock %}
 
 {% block content %}
-<section class="page-header">
-    <div class="container">
-        <h1>Our Collection</h1>
-        <p>Discover premium fashion and accessories</p>
+<section class="page-header {% if current_category %}category-bg-{{ current_category.slug }}{% endif %}" {% if bg_url %}style="position:relative;"{% endif %}>
+    {% if bg_url %}<div class="page-header-bg" style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('{{ bg_url }}') center/cover;opacity:0.25;"></div>{% endif %}
+    <div class="container" style="position:relative;z-index:1;">
+        <h1>{% if current_category %}{{ current_category.name }}{% else %}Our Collection{% endif %}</h1>
+        <p>{% if current_category %}Discover our premium {{ current_category.name|lower }}{% else %}Discover premium fashion and accessories{% endif %}</p>
     </div>
 </section>
 
@@ -133,12 +134,23 @@
     position: relative;
     overflow: hidden;
 }
-.page-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920') center/cover;
-    opacity: 0.2;
+.category-bg-handbags {
+    background: linear-gradient(135deg, #2b1b17, #1a1a2e) !important;
+}
+.category-bg-jewelry {
+    background: linear-gradient(135deg, #3d2b1f, #1a1a1a) !important;
+}
+.category-bg-cosmetics {
+    background: linear-gradient(135deg, #4a1528, #1a1a2e) !important;
+}
+.category-bg-perfumes {
+    background: linear-gradient(135deg, #1f2a40, #0f0f1a) !important;
+}
+.category-bg-bangles {
+    background: linear-gradient(135deg, #2a3b1f, #1a1a1a) !important;
+}
+.category-bg-accessories {
+    background: linear-gradient(135deg, #1a2a3d, #1a1a1a) !important;
 }
 .page-header h1 {
     font-size: 48px;

@@ -32,8 +32,10 @@ def product_list(request):
     sort = request.GET.get('sort', '-created_at')
     search = request.GET.get('search')
     
+    current_category = None
     if category_slug:
-        products = products.filter(category__slug=category_slug)
+        current_category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=current_category)
     if brand:
         products = products.filter(brand__icontains=brand)
     if min_price:
@@ -58,7 +60,21 @@ def product_list(request):
         'products': products,
         'categories': categories,
         'brands': brands,
+        'current_category': current_category,
     }
+    
+    # Category background images
+    bg_images = {
+        'handbags': 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=1920',
+        'jewelry': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1920',
+        'cosmetics': 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920',
+        'perfumes': 'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=1920',
+        'bangles': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1920',
+        'accessories': 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=1920',
+    }
+    bg_url = bg_images.get(category_slug, 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920')
+    context['bg_url'] = bg_url
+    
     return render(request, 'store/product_list.html', context)
 
 def product_detail(request, slug):
@@ -172,7 +188,6 @@ def remove_from_cart(request):
     request.session['cart'] = cart
     return redirect('cart')
 
-@login_required
 def checkout(request):
     cart = request.session.get('cart', {})
     
@@ -199,11 +214,33 @@ def checkout(request):
             continue
     
     if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name', '')
+        email = request.POST.get('email')
         shipping_address = request.POST.get('shipping_address')
         phone = request.POST.get('phone')
         payment_method = request.POST.get('payment_method', 'cod')
         coupon_code = request.POST.get('coupon_code', '')
         notes = request.POST.get('notes', '')
+        
+        # Handle User (Guest Checkout)
+        current_user = request.user
+        if not current_user.is_authenticated:
+            if email:
+                try:
+                    current_user = User.objects.get(email=email)
+                except User.DoesNotExist:
+                    current_user = User.objects.create_user(
+                        username=email, 
+                        email=email, 
+                        password='guest_password'
+                    )
+                    current_user.first_name = first_name
+                    current_user.last_name = last_name
+                    current_user.save()
+            else:
+                messages.error(request, 'Email is required for guest checkout.')
+                return redirect('checkout')
         
         discount = 0
         if coupon_code:
@@ -220,7 +257,7 @@ def checkout(request):
         order_number = 'ORD' + ''.join(str(random.randint(0, 9)) for _ in range(8))
         
         order = Order.objects.create(
-            user=request.user,
+            user=current_user,
             order_number=order_number,
             shipping_address=shipping_address,
             phone=phone,
