@@ -1,6 +1,6 @@
 @echo off
-title Luxe Store Server
-echo Starting Luxe Store Server...
+title STYLEORA Server
+echo Starting STYLEORA Server...
 echo.
 echo Server will be available at: http://127.0.0.1:8000
 echo.

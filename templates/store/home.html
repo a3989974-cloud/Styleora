@@ -2,13 +2,18 @@
 {% load static %}
 {% load cart_count %}
 
-{% block title %}Luxe Store - Premium Fashion{% endblock %}
+{% block title %}STYLEORA - Premium Fashion{% endblock %}
 
 {% block content %}
 <!-- Hero -->
 <section class="hero">
     <div class="hero-content">
-        <h1>Elegance Redefined</h1>
+        <h1>
+            <span class="hero-logo-bg">
+                <img src="{% static 'styleora-logo.png' %}" alt="">
+            </span>
+            STYLEORA
+        </h1>
         <p>Discover premium fashion for the modern woman</p>
         <a href="{% url 'product_list' %}" class="btn">Shop Now</a>
     </div>
@@ -17,32 +22,32 @@
 <!-- Categories -->
 <section class="categories">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title animate-on-scroll">
             <h2>Shop by Category</h2>
             <p>Explore our curated collections</p>
         </div>
         <div class="category-grid">
-            <a href="{% url 'product_list' %}?category=handbags" class="category-card">
+            <a href="{% url 'product_list' %}?category=handbags" class="category-card animate-on-scroll">
                 <img src="/media/products/cat_handbags.jpg" alt="Handbags">
                 <h3>Handbags</h3>
             </a>
-            <a href="{% url 'product_list' %}?category=jewelry" class="category-card">
+            <a href="{% url 'product_list' %}?category=jewelry" class="category-card animate-on-scroll">
                 <img src="/media/products/cat_jewelry.jpg" alt="Jewelry">
                 <h3>Jewelry</h3>
             </a>
-            <a href="{% url 'product_list' %}?category=cosmetics" class="category-card">
+            <a href="{% url 'product_list' %}?category=cosmetics" class="category-card animate-on-scroll">
                 <img src="/media/products/cat_cosmetics.jpg" alt="Cosmetics">
                 <h3>Cosmetics</h3>
             </a>
-            <a href="{% url 'product_list' %}?category=perfumes" class="category-card">
+            <a href="{% url 'product_list' %}?category=perfumes" class="category-card animate-on-scroll">
                 <img src="/media/products/cat_perfumes.jpg" alt="Perfumes">
                 <h3>Perfumes</h3>
             </a>
-            <a href="{% url 'product_list' %}?category=bangles" class="category-card">
+            <a href="{% url 'product_list' %}?category=bangles" class="category-card animate-on-scroll">
                 <img src="/media/products/cat_bangles.jpg" alt="Bangles">
                 <h3>Bangles</h3>
             </a>
-            <a href="{% url 'product_list' %}?category=accessories" class="category-card">
+            <a href="{% url 'product_list' %}?category=accessories" class="category-card animate-on-scroll">
                 <img src="/media/products/acc_icon.jpg" alt="Accessories">
                 <h3>Accessories</h3>
             </a>
@@ -54,7 +59,7 @@
 {% if trending_products %}
 <section class="products-section">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title animate-on-scroll">
             <h2>Trending Now</h2>
             <p>Most popular picks this season</p>
         </div>
@@ -97,7 +102,7 @@
 {% if featured_products %}
 <section class="products-section">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title animate-on-scroll">
             <h2>Featured Collection</h2>
             <p>Handpicked just for you</p>
         </div>
@@ -141,7 +146,7 @@
 {% if new_arrivals %}
 <section class="products-section">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title animate-on-scroll">
             <h2>New Arrivals</h2>
             <p>Fresh from our collection</p>
         </div>

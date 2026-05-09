@@ -1,1 +1,1 @@
-"""Luxe Store Project"""
+"""STYLEORA Project"""
