@@ -29,7 +29,7 @@ cd "$PROJECT_DIR"
 
 # Create virtual environment
 echo "[2/6] Creating virtual environment..."
-python3.13 -m venv venv
+python3.12 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
