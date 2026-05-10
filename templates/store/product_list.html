@@ -128,34 +128,34 @@
 {% block extra_css %}
 <style>
 .page-header {
-    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    background: linear-gradient(135deg, var(--hero-bg), var(--footer-bg));
     padding: 80px 0;
     text-align: center;
     position: relative;
     overflow: hidden;
 }
 .category-bg-handbags {
-    background: linear-gradient(135deg, #2b1b17, #1a1a2e) !important;
+    background: linear-gradient(135deg, var(--hero-bg), var(--footer-bg)) !important;
 }
 .category-bg-jewelry {
-    background: linear-gradient(135deg, #3d2b1f, #1a1a1a) !important;
+    background: linear-gradient(135deg, var(--hero-bg), var(--card-bg)) !important;
 }
 .category-bg-cosmetics {
-    background: linear-gradient(135deg, #4a1528, #1a1a2e) !important;
+    background: linear-gradient(135deg, var(--footer-bg), var(--bg)) !important;
 }
 .category-bg-perfumes {
-    background: linear-gradient(135deg, #1f2a40, #0f0f1a) !important;
+    background: linear-gradient(135deg, var(--card-bg), var(--footer-bg)) !important;
 }
 .category-bg-bangles {
-    background: linear-gradient(135deg, #2a3b1f, #1a1a1a) !important;
+    background: linear-gradient(135deg, var(--hero-bg), var(--section-alt)) !important;
 }
 .category-bg-accessories {
-    background: linear-gradient(135deg, #1a2a3d, #1a1a1a) !important;
+    background: linear-gradient(135deg, var(--card-bg), var(--hero-bg)) !important;
 }
 .page-header h1 {
     font-size: 48px;
     margin-bottom: 10px;
-    color: white;
+    color: var(--hero-text);
     position: relative;
     animation: fadeInUp 0.6s ease-out;
 }
@@ -169,7 +169,8 @@
     border-radius: 2px;
 }
 .page-header p {
-    color: rgba(255,255,255,0.8);
+    color: var(--hero-text);
+    opacity: 0.8;
     font-size: 16px;
     position: relative;
     animation: fadeInUp 0.6s ease-out 0.2s backwards;
@@ -188,16 +189,16 @@
     align-self: start;
 }
 .filter-section {
-    background: var(--white);
+    background: var(--card-bg);
     padding: 25px;
     border-radius: 12px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--border);
     transition: all 0.3s;
 }
 .filter-section:hover {
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-md);
 }
 .filter-section h3 {
     font-size: 15px;
@@ -253,7 +254,7 @@
     width: 100%;
     padding: 12px;
     background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: var(--white);
+    color: var(--btn-fg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -265,7 +266,7 @@
 }
 .btn-filter:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(201, 169, 98, 0.3);
+    box-shadow: var(--shadow-gold-lg);
 }
 .products-toolbar {
     display: flex;
@@ -273,9 +274,9 @@
     align-items: center;
     margin-bottom: 30px;
     padding: 15px 20px;
-    background: var(--white);
+    background: var(--toolbar-bg);
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-sm);
 }
 .sort-dropdown select {
     padding: 12px 20px;
@@ -322,7 +323,7 @@
     text-align: center;
     padding: 80px;
     color: var(--text-light);
-    background: var(--white);
+    background: var(--card-bg);
     border-radius: 12px;
 }
 .product-grid .product-actions {
@@ -333,7 +334,7 @@
     display: flex;
     gap: 8px;
     padding: 15px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    background: var(--gradient-overlay);
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s;
@@ -345,16 +346,18 @@
 .product-actions button {
     flex: 1;
     padding: 12px;
-    background: var(--white);
+    background: var(--card-bg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s;
 }
+.product-actions button i { color: var(--secondary); }
+.product-actions button:hover i { color: var(--btn-fg); }
 .product-actions button:hover {
     background: var(--secondary);
-    color: var(--white);
+    color: var(--btn-fg);
     transform: scale(1.05);
 }
 @media (max-width: 1024px) {
@@ -375,7 +378,7 @@
     .products-toolbar { flex-direction: column; gap: 15px; padding: 15px; }
     .sort-dropdown { width: 100%; }
     .sort-dropdown select { width: 100%; }
-    .product-grid .product-actions { opacity: 1; transform: none; padding: 10px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); }
+    .product-grid .product-actions { opacity: 1; transform: none; padding: 10px; background: var(--gradient-overlay); }
     .product-grid .product-actions button { padding: 10px; font-size: 14px; }
 }
 @media (max-width: 480px) {

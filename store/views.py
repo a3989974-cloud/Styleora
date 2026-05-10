@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .models import Category, Product, Order, OrderItem, Wishlist, Coupon
 from django.db.models import Avg
 import random

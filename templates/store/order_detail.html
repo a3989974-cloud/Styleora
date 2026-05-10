@@ -99,7 +99,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: var(--text-light);
+    color: var(--icon-color);
     margin-bottom: 20px;
     transition: all 0.3s;
     font-weight: 500;
@@ -145,25 +145,25 @@
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: var(--white);
+    background: var(--card-bg);
     border: 2px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--border);
+    color: var(--icon-color);
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-md);
 }
 .status-step.completed .step-icon {
     background: var(--success);
     border-color: var(--success);
-    color: var(--white);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    color: var(--badge-fg);
+    box-shadow: var(--shadow-gold);
 }
 .status-step.active .step-icon {
     background: var(--secondary);
     border-color: var(--secondary);
-    color: var(--white);
+    color: var(--btn-fg);
     animation: glow 2s ease-in-out infinite;
 }
 .step-info {
@@ -175,7 +175,7 @@
 }
 .step-info p {
     font-size: 12px;
-    color: var(--text-light);
+    color: var(--text-muted);
 }
 .order-layout {
     display: grid;
@@ -192,14 +192,14 @@
     align-items: center;
     gap: 20px;
     padding: 20px;
-    background: var(--white);
+    background: var(--card-bg);
     border-radius: 12px;
     margin-bottom: 15px;
     border: 1px solid var(--border);
     transition: all 0.3s;
 }
 .order-item:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-md);
     transform: translateX(5px);
 }
 .order-item img {
@@ -207,7 +207,7 @@
     height: 90px;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
 }
 .item-details {
     flex: 1;
@@ -218,15 +218,15 @@
 }
 .item-details p {
     font-size: 14px;
-    color: var(--text-light);
+    color: var(--text-muted);
 }
 .item-price,
 .item-total {
     font-weight: 600;
-    color: var(--secondary);
+    color: var(--price-fg);
 }
 .info-card {
-    background: var(--white);
+    background: var(--card-bg);
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 15px;
@@ -234,11 +234,11 @@
     transition: all 0.3s;
 }
 .info-card:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-md);
 }
 .info-card h3 {
     font-size: 14px;
-    color: var(--text-light);
+    color: var(--text-muted);
     margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -249,11 +249,11 @@
     font-size: 12px;
     font-weight: 600;
 }
-.payment-status.pending { background: #fff3cd; color: #856404; }
-.payment-status.paid { background: #d4edda; color: #155724; }
+.payment-status.pending { background: rgba(217,119,6,0.12); color: var(--accent); }
+.payment-status.paid { background: rgba(16,185,129,0.12); color: var(--success); }
 .total-card {
-    background: linear-gradient(135deg, var(--primary), #1a1a2e);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--hero-bg), #1a1a2e);
+    color: var(--hero-text);
 }
 .total-card h3 {
     color: rgba(255,255,255,0.7);
@@ -261,7 +261,7 @@
 .total-amount {
     font-size: 28px;
     font-weight: 700;
-    color: var(--secondary);
+    color: var(--price-fg);
 }
 @media (max-width: 1024px) {
     .order-layout { grid-template-columns: 1fr; }

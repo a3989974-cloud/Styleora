@@ -184,11 +184,11 @@
     top: 120px;
 }
 .main-image {
-    background: var(--light);
+    background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-lg);
 }
 .main-image img {
     width: 100%;
@@ -210,13 +210,13 @@
     cursor: pointer;
     border: 2px solid transparent;
     transition: all 0.3s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
 }
 .thumbnails img:hover,
 .thumbnails img.active {
     border-color: var(--secondary);
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(201, 169, 98, 0.2);
+    box-shadow: var(--shadow-gold);
 }
 .breadcrumb {
     display: flex;
@@ -239,10 +239,10 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
-    color: var(--secondary);
+    color: var(--star-color);
 }
 .rating span {
-    color: var(--text-light);
+    color: var(--text-muted);
     font-size: 14px;
 }
 .price-detail {
@@ -251,22 +251,23 @@
     gap: 15px;
     margin-bottom: 25px;
     padding: 15px 20px;
-    background: var(--light);
+    background: var(--card-bg-alt);
     border-radius: 10px;
+    border: 1px solid var(--border-light);
 }
 .price-detail .current-price {
     font-size: 32px;
     font-weight: 700;
-    color: var(--secondary);
+    color: var(--price-fg);
 }
 .price-detail .old-price {
     font-size: 20px;
-    color: var(--text-light);
+    color: var(--price-old);
     text-decoration: line-through;
 }
 .discount-badge {
     background: linear-gradient(135deg, var(--danger), #e63946);
-    color: var(--white);
+    color: var(--badge-fg);
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -280,8 +281,9 @@
 .product-meta {
     margin-bottom: 30px;
     padding: 20px;
-    background: var(--light);
+    background: var(--card-bg-alt);
     border-radius: 10px;
+    border: 1px solid var(--border-light);
 }
 .meta-item {
     display: flex;
@@ -291,7 +293,7 @@
 }
 .meta-item .label {
     font-weight: 600;
-    color: var(--text);
+    color: var(--heading-fg);
     min-width: 100px;
 }
 .add-to-cart-form {
@@ -307,7 +309,8 @@
     width: 45px;
     height: 45px;
     border: 1px solid var(--border);
-    background: var(--white);
+    background: var(--card-bg);
+    color: var(--input-fg);
     font-size: 20px;
     cursor: pointer;
     border-radius: 8px;
@@ -316,7 +319,7 @@
 }
 .quantity-selector button:hover {
     border-color: var(--secondary);
-    background: rgba(201, 169, 98, 0.05);
+    background: rgba(201, 169, 98, 0.08);
 }
 .quantity-selector input {
     width: 70px;
@@ -326,6 +329,8 @@
     border-radius: 8px;
     font-size: 16px;
     font-weight: 600;
+    background: var(--input-bg);
+    color: var(--input-fg);
 }
 .action-buttons {
     display: flex;
@@ -335,7 +340,7 @@
     flex: 1;
     padding: 18px 40px;
     background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: var(--white);
+    color: var(--btn-fg);
     border: none;
     border-radius: 10px;
     font-size: 16px;
@@ -364,18 +369,18 @@
 }
 .btn-add-cart:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(201, 169, 98, 0.4);
+    box-shadow: var(--shadow-gold-lg);
 }
 .btn-wishlist {
     width: 60px;
     height: 60px;
     border: 2px solid var(--border);
-    background: var(--white);
+    background: var(--card-bg);
     border-radius: 10px;
     font-size: 20px;
     cursor: pointer;
     transition: all 0.3s;
-    color: var(--text-light);
+    color: var(--icon-color);
 }
 .btn-wishlist:hover {
     border-color: var(--danger);
@@ -398,13 +403,14 @@
 }
 .review-item {
     padding: 25px;
-    background: var(--light);
+    background: var(--card-bg-alt);
     border-radius: 10px;
     margin-bottom: 20px;
     transition: all 0.3s;
+    border: 1px solid var(--border-light);
 }
 .review-item:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-md);
     transform: translateX(5px);
 }
 .review-header {

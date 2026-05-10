@@ -4,55 +4,49 @@
 {% block title %}Order History - STYLEORA{% endblock %}
 
 {% block content %}
-<section class="order-history-page">
+<section class="orders-page">
     <div class="container">
-        <h1>My Orders</h1>
+        <h1>Order History</h1>
         
         {% if orders %}
         <div class="orders-list">
             {% for order in orders %}
             <div class="order-card">
                 <div class="order-header">
-                    <div class="order-info">
-                        <span class="order-number">Order #{{ order.order_number }}</span>
+                    <div>
+                        <span class="order-id">Order #{{ order.id }}</span>
                         <span class="order-date">{{ order.created_at|date:"F d, Y" }}</span>
                     </div>
-                    <div class="order-status">
-                        <span class="status-badge {{ order.status }}">{{ order.get_status_display }}</span>
-                    </div>
+                    <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
                 </div>
-                
-                <div class="order-details">
-                    <div class="order-items-preview">
-                        {% for item in order.items.all|slice:":2" %}
-                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                <div class="order-body">
+                    <div class="order-items">
+                        {% for item in order.items.all|slice:":3" %}
+                        <div class="order-item">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            <div>
+                                <h4>{{ item.product.name }}</h4>
+                                <p>Qty: {{ item.quantity }}</p>
+                            </div>
+                        </div>
                         {% endfor %}
-                        {% if order.items.count > 2 %}
-                        <span class="more-items">+{{ order.items.count|add:"-2" }} more</span>
+                        {% if order.items.all|length > 3 %}
+                        <p class="more-items">+{{ order.items.all|length|add:"-3" }} more items</p>
                         {% endif %}
                     </div>
-                    
                     <div class="order-summary">
-                        <div class="summary-item">
-                            <span>Items</span>
-                            <span>{{ order.items.count }}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span>Total</span>
-                            <span class="total-amount">${{ order.total_amount }}</span>
-                        </div>
+                        <span class="order-total">${{ order.total }}</span>
+                        <a href="{% url 'order_detail' order.id %}" class="btn-view">View Details</a>
                     </div>
-                    
-                    <a href="{% url 'order_detail' order_number=order.order_number %}" class="btn-view-order">View Details</a>
                 </div>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <div class="empty-orders">
-            <i class="fas fa-box"></i>
+        <div class="no-orders">
+            <i class="fas fa-box-open"></i>
             <h2>No orders yet</h2>
-            <p>You haven't placed any orders yet.</p>
+            <p>Start shopping to see your orders here</p>
             <a href="{% url 'product_list' %}" class="btn">Start Shopping</a>
         </div>
         {% endif %}
@@ -62,6 +56,157 @@
 
 {% block extra_css %}
 <style>
+.orders-page {
+    padding: 60px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+.orders-page h1 {
+    font-size: 42px;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.5s ease-out;
+}
+.orders-page h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    margin-top: 15px;
+    border-radius: 2px;
+}
+.order-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    transition: all 0.3s;
+}
+.order-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+}
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: var(--card-bg-alt);
+    border-bottom: 1px solid var(--border);
+}
+.order-id {
+    font-weight: 700;
+    color: var(--price-fg);
+}
+.order-date {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-left: 15px;
+}
+.order-status {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.order-status.pending { background: rgba(217,119,6,0.12); color: var(--accent); }
+.order-status.confirmed { background: rgba(37,99,235,0.12); color: #60a5fa; }
+.order-status.shipped { background: rgba(16,185,129,0.12); color: var(--success); }
+.order-status.delivered { background: rgba(16,185,129,0.12); color: var(--success); }
+.order-status.cancelled { background: rgba(220,38,38,0.12); color: var(--danger); }
+.order-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+}
+.order-items {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.order-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+.order-item h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--heading-fg);
+}
+.order-item p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.more-items {
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+.order-summary {
+    text-align: right;
+    min-width: 120px;
+}
+.order-total {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--price-fg);
+    margin-bottom: 8px;
+}
+.btn-view {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: var(--btn-fg);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s;
+    border: none;
+}
+.btn-view:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold-lg);
+}
+.no-orders {
+    text-align: center;
+    padding: 100px 0;
+}
+.no-orders i {
+    font-size: 80px;
+    color: var(--icon-color);
+    margin-bottom: 30px;
+}
+.no-orders h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+.no-orders p {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+@media (max-width: 768px) {
+    .orders-page { padding: 40px 0; }
+    .orders-page h1 { font-size: 28px; }
+    .order-header { flex-direction: column; gap: 10px; padding: 15px 20px; }
+    .order-body { flex-direction: column; gap: 15px; padding: 15px 20px; }
+    .order-items { flex-wrap: wrap; }
+    .order-summary { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+}
+@media (max-width: 480px) {
+    .orders-page h1 { font-size: 24px; }
+    .order-item img { width: 50px; height: 50px; }
+}
 .order-history-page {
     padding: 60px 0;
     animation: fadeIn 0.5s ease-out;
@@ -86,14 +231,14 @@
     gap: 20px;
 }
 .order-card {
-    background: var(--white);
+    background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border);
     transition: all 0.3s;
 }
 .order-card:hover {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-lg);
     transform: translateX(5px);
 }
 .order-header {
@@ -102,7 +247,7 @@
     align-items: center;
     padding: 20px 25px;
     border-bottom: 1px solid var(--border);
-    background: var(--light);
+    background: var(--card-bg-alt);
 }
 .order-info {
     display: flex;
@@ -125,11 +270,11 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-.status-badge.pending { background: #fff3cd; color: #856404; }
-.status-badge.confirmed { background: #cce5ff; color: #004085; }
-.status-badge.shipped { background: #d4edda; color: #155724; }
-.status-badge.delivered { background: #d4edda; color: #155724; }
-.status-badge.cancelled { background: #f8d7da; color: #721c24; }
+.status-badge.pending { background: rgba(217,119,6,0.12); color: var(--accent); }
+.status-badge.confirmed { background: rgba(37,99,235,0.12); color: #60a5fa; }
+.status-badge.shipped { background: rgba(16,185,129,0.12); color: var(--success); }
+.status-badge.delivered { background: rgba(16,185,129,0.12); color: var(--success); }
+.status-badge.cancelled { background: rgba(220,38,38,0.12); color: var(--danger); }
 .order-details {
     display: flex;
     align-items: center;

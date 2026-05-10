@@ -14,6 +14,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
     'https://*.lhr.life',
     'https://*.serveousercontent.com',
+    'https://*.pythonanywhere.com',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'store',
     'accounts',
+    'chatbot',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +126,10 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# ── AI Chatbot Settings ──
+MONGODB_URI = os.environ.get('MONGODB_URI', '')
+MONGODB_DB_NAME = os.environ.get('MONGODB_DB_NAME', 'styleora_chatbot')
 
 # Production Security
 if not DEBUG:

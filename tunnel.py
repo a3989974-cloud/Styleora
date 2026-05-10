@@ -1,16 +1,12 @@
-import subprocess, re, sys, os, signal
+import subprocess, os
 
 proc = subprocess.Popen(
-    ['ssh', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=NUL', '-o', 'ServerAliveInterval=30', '-R', '80:localhost:8000', 'nokey@localhost.run'],
+    ['ssh', '-o', 'StrictHostKeyChecking=no', '-o', 'ServerAliveInterval=30', '-o', 'ServerAliveCountMax=3',
+     '-i', os.path.expanduser('~/.ssh/serveo_key'),
+     '-N', '-R', 'styleora:80:127.0.0.1:8000', 'serveo.net'],
     stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
 )
-url = None
-for line in iter(proc.stdout.readline, ''):
-    m = re.search(r'https://([\w-]+\.lhr\.life)', line)
-    if m:
-        url = m.group(0)
-        with open(os.path.join(os.path.dirname(__file__), 'tunnel_url.txt'), 'w') as f:
-            f.write(url)
-        print(url, flush=True)
-        break
+with open(os.path.join(os.path.dirname(__file__), 'tunnel_url.txt'), 'w') as f:
+    f.write('https://styleora.serveo.net')
+print('https://styleora.serveo.net')
 proc.wait()

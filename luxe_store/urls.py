@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('store.urls')),
     path('accounts/', include('accounts.urls')),
     path('api/', include('store.api_urls')),
+    path('api/chatbot/', include('chatbot.urls')),
 ]
 
 if settings.DEBUG:

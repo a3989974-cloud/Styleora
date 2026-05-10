@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from django.urls import reverse
 from .models import Category, Product, ProductReview, Order, OrderItem, Wishlist, Coupon
 
@@ -90,7 +90,7 @@ class ProductAdmin(admin.ModelAdmin):
             badges += '<span style="background:#2563eb;color:white;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">TRENDING</span> '
         if obj.is_featured:
             badges += '<span style="background:#c9a962;color:#0f0f0f;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">FEATURED</span> '
-        return format_html(badges.strip())
+        return mark_safe(badges.strip()) or '-'
     status_badges.short_description = 'Status'
     
     def image_tag(self, obj):

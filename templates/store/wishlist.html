@@ -82,13 +82,13 @@
     display: flex;
     gap: 20px;
     padding: 20px;
-    background: var(--white);
+    background: var(--card-bg);
     border-radius: 12px;
     border: 1px solid var(--border);
     transition: all 0.3s;
 }
 .wishlist-item:hover {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-3px);
 }
 .item-image img {
@@ -96,7 +96,7 @@
     height: 150px;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
 }
 .item-info {
     flex: 1;
@@ -120,7 +120,7 @@
 .product-price .current-price {
     font-size: 18px;
     font-weight: 600;
-    color: var(--secondary);
+    color: var(--price-fg);
 }
 .product-price .old-price {
     font-size: 14px;
@@ -137,7 +137,7 @@
 .btn-add-cart {
     padding: 12px 25px;
     background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: var(--white);
+    color: var(--btn-fg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -146,21 +146,21 @@
 }
 .btn-add-cart:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(201, 169, 98, 0.3);
+    box-shadow: var(--shadow-gold-lg);
 }
 .btn-remove {
     padding: 12px 15px;
-    background: var(--white);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
     cursor: pointer;
-    color: var(--text-light);
+    color: var(--icon-color);
     transition: all 0.3s;
 }
 .btn-remove:hover {
     border-color: var(--danger);
     color: var(--danger);
-    background: rgba(220, 38, 38, 0.05);
+    background: rgba(220, 38, 38, 0.08);
 }
 .empty-wishlist {
     text-align: center;
